@@ -306,8 +306,19 @@ public class MagicValues {
 
         register(GlobalEntityType.LIGHTNING_BOLT, 1);
 
-        register(MobType.MOB, 48);
-        register(MobType.MONSTER, 49);
+        register(MobType.ELDER_GUARDIAN, 4);
+        register(MobType.WITHER_SKELETON, 5);
+        register(MobType.STRAY, 6);
+        register(MobType.HUSK, 23);
+        register(MobType.ZOMBIE_VILLAGER, 27);
+        register(MobType.SKELETON_HORSE, 28);
+        register(MobType.ZOMBIE_HORSE, 29);
+        register(MobType.ARMOR_STAND, 30);
+        register(MobType.DONKEY, 31);
+        register(MobType.MULE, 32);
+        register(MobType.EVOCATION_ILLAGER, 34);
+        register(MobType.VEX, 35);
+        register(MobType.VINDICATION_ILLAGER, 36);
         register(MobType.CREEPER, 50);
         register(MobType.SKELETON, 51);
         register(MobType.SPIDER, 52);
@@ -341,6 +352,7 @@ public class MagicValues {
         register(MobType.HORSE, 100);
         register(MobType.RABBIT, 101);
         register(MobType.POLAR_BEAR, 102);
+        register(MobType.LLAMA, 103);
         register(MobType.VILLAGER, 120);
 
         register(ObjectType.BOAT, 1);

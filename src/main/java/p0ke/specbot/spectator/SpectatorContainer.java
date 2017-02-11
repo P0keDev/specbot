@@ -11,6 +11,7 @@ public class SpectatorContainer {
 	private List<Spectator> spectators;
 	private String owner;
 	private boolean sentIntro = false;
+	private boolean finished = false;
 	private Timer timer = new Timer();
 
 	public SpectatorContainer(String o, List<Spectator> s) {
@@ -20,9 +21,10 @@ public class SpectatorContainer {
 			spec.assignContainer(this);
 			spec.login();
 		}
+
+		timer.schedule(new ExpireTimer(this), 45 * 60 * 1000);
 		
-		timer.schedule(new ExpireTimer(this), 45*60*1000);
-		
+
 	}
 
 	public boolean sentIntro() {
@@ -33,31 +35,33 @@ public class SpectatorContainer {
 			return true;
 		}
 	}
-	
-	public String getOwner(){
+
+	public String getOwner() {
 		return owner;
 	}
-	
-	
-	
+
+	public boolean isFinished() {
+		return finished;
+	}
 
 	public void finish(boolean forced) {
+		finished = true;
 		timer.cancel();
-		for(Spectator spec : spectators){
+		for (Spectator spec : spectators) {
 			spec.finish(forced);
 			forced = false;
 		}
 		SpecBot.instance.specManager.removeContainer(this);
+
 	}
 
 	public class ExpireTimer extends TimerTask {
 		SpectatorContainer caller;
-		
-		public ExpireTimer(SpectatorContainer c){
+
+		public ExpireTimer(SpectatorContainer c) {
 			caller = c;
 		}
-		
-		
+
 		@Override
 		public void run() {
 			caller.finish(true);

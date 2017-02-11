@@ -85,6 +85,13 @@ public class SpectatorManager {
 		return "You have not requested any spectators!";
 	}
 	
+	public void recallAll(){
+		for(SpectatorContainer c : containers){
+			c.finish(true);
+		}
+		containers.clear();
+	}
+	
 	public void removeContainer(SpectatorContainer c){
 		containers.remove(c);
 	}

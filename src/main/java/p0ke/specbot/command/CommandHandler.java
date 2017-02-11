@@ -58,7 +58,7 @@ public class CommandHandler {
 			if(args.size() == 1 && args.get(0).isEmpty()){
 				args = new ArrayList<String>();
 			}
-			String command = event.getMessage().getContent().split(" ")[0].replace("!", "").toLowerCase();
+			String command = event.getMessage().getContent().split(" ")[0].substring(1).toLowerCase();
 			RMessageBuilder msg = new RMessageBuilder(event.getClient()).withChannel(event.getMessage().getChannel());
 			
 			if(commandRegistry.containsKey(command)){

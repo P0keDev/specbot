@@ -50,7 +50,9 @@ public class SpectatorChatBot extends SessionAdapter {
 				}
 				
 				if(content.endsWith("has disbanded the party!") || content.startsWith("You have been kicked from the party")){
-					parent.getContainer().finish(false);
+					if(!parent.getContainer().isFinished()){
+						parent.getContainer().finish(false);
+					}
 				}
 
 			}
@@ -63,6 +65,9 @@ public class SpectatorChatBot extends SessionAdapter {
 	 @Override
      public void disconnected(DisconnectedEvent event) {
          System.out.println("Disconnected: " + Message.fromString(event.getReason()).getFullText());
+         if(!parent.getContainer().isFinished()){
+        	 parent.getContainer().finish(false);
+         }
          if(event.getCause() != null) {
              event.getCause().printStackTrace();
          }

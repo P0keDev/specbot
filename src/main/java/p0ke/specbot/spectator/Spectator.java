@@ -1,6 +1,8 @@
 package p0ke.specbot.spectator;
 
 import java.net.Proxy;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.spacehq.mc.auth.exception.request.RequestException;
 import org.spacehq.mc.protocol.MinecraftConstants;
@@ -18,6 +20,7 @@ public class Spectator {
 	private boolean inParty = false;
 	private SpectatorContainer container = null;
 	private Client client;
+	Timer timer = new Timer();
 
 	public Spectator(String n, String u, String p) {
 		name = n;
@@ -60,9 +63,9 @@ public class Spectator {
 		}
 		client.getSession().send(new ClientChatPacket("/p leave"));
 		try {
-			client.getSession().disconnect("Finished!");
+			timer.schedule(new DisconnectTimer(client), 500);
 		} catch (Exception e){
-			
+			e.printStackTrace();
 		}
 	}
 
@@ -80,6 +83,21 @@ public class Spectator {
 		client.getSession().setFlag(MinecraftConstants.AUTH_PROXY_KEY, Proxy.NO_PROXY);
 		client.getSession().addListener(new SpectatorChatBot(this));
 		client.getSession().connect();
+	}
+	
+	class DisconnectTimer extends TimerTask {
+		Client caller;
+		
+		public DisconnectTimer(Client c){
+			caller = c;
+		}
+		
+		
+		@Override
+		public void run() {
+			caller.getSession().disconnect("Finished!");
+		}
+		
 	}
 
 }

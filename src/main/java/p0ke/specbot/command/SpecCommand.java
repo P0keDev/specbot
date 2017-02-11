@@ -14,7 +14,7 @@ public class SpecCommand extends CommandBase {
 			
 			if(args.get(0).equalsIgnoreCase("status")){
 				msg.withQuote(SpecBot.instance.specManager.getSpectatorStatus()).build();
-			}
+			} else
 			
 			
 			if(args.get(0).equalsIgnoreCase("request")){
@@ -33,15 +33,23 @@ public class SpecCommand extends CommandBase {
 						return;
 					}
 				}
-				
+				event.getMessage().getChannel().setTypingStatus(true);
 				msg.withContent(SpecBot.instance.specManager.requestSpectators(event.getMessage().getAuthor().getID(), n)).build();
+				event.getMessage().getChannel().setTypingStatus(false);
 				
-			}
+			} else
 			
 			
 			if(args.get(0).equalsIgnoreCase("recall")){
 				msg.withContent(SpecBot.instance.specManager.recallContainer(event.getMessage().getAuthor().getID())).build();
-			}
+			} else
+			
+				
+			if(args.get(0).equalsIgnoreCase("forcerecall")){
+				if(event.getMessage().getAuthor().getID().equals("158865537848311809")){
+					SpecBot.instance.specManager.recallAll();
+				}
+			} else
 			
 			
 			if(args.get(0).equalsIgnoreCase("help")){
@@ -51,12 +59,18 @@ public class SpecCommand extends CommandBase {
 				builder.append("!spec request [#]     Requests # bots (if no # is specified, 2 are requested)\n");
 				builder.append("!spec recall          Recalls any bots you have requested");
 				msg.withQuote(builder.toString()).build();
-			}
+			} else
+			
 			
 			if(args.get(0).equalsIgnoreCase("reload")){
 				if(event.getMessage().getAuthor().getID().equals("158865537848311809")){
 					SpecBot.instance.specManager.loadSpectators();
 				}
+			} else 
+			
+			
+			{
+				msg.withContent("Use !spec help").build();
 			}
 			
 			

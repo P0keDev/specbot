@@ -8,6 +8,7 @@ import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
+import sx.blah.discord.handle.obj.Status;
 import sx.blah.discord.util.DiscordException;
 
 public class SpecBot {
@@ -23,7 +24,7 @@ public class SpecBot {
 		((Discord4J.Discord4JLogger) Discord4J.LOGGER).setLevel(Discord4J.Discord4JLogger.Level.INFO);
 
 		try {
-			instance = login("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+			instance = login("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 		} catch (Exception e) {
 			System.out.println("Failed to connect to server. Stacktrace below:");
 			e.printStackTrace();
@@ -38,6 +39,8 @@ public class SpecBot {
 		commandHandler = new CommandHandler();
 		specManager = new SpectatorManager();
 		
+		client.changeStatus(Status.game("Smash Heroes"));
+		
 		
 		System.out.println("Ready!");
 		
@@ -45,7 +48,7 @@ public class SpecBot {
 	
 	@EventSubscriber
 	public void onMessage(MessageReceivedEvent event){
-		if(event.getMessage().getContent().startsWith("!")){
+		if(event.getMessage().getContent().startsWith("!") || event.getMessage().getContent().startsWith("/")){
 			commandHandler.handleCommand(event);
 		}
 	}
