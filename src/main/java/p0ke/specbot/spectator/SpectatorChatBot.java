@@ -51,7 +51,7 @@ public class SpectatorChatBot extends SessionAdapter {
 					event.getSession().send(new ClientChatPacket("/lobby smash"));
 				}
 				
-				if(content.endsWith("has disbanded the party!") || content.startsWith("You have been kicked from the party")){
+				if(content.endsWith("has disbanded the party!") || content.startsWith("You have been kicked from the party") || content.endsWith("the party has been disbanded.")){
 					if(!parent.getContainer().isFinished()){
 						parent.getContainer().finish(false);
 					}
