@@ -10,6 +10,7 @@ public class SpectatorContainer {
 
 	private List<Spectator> spectators;
 	private String owner;
+	private String pLeader = "";
 	private boolean sentIntro = false;
 	private boolean finished = false;
 	private Timer timer = new Timer();
@@ -35,6 +36,14 @@ public class SpectatorContainer {
 			return true;
 		}
 	}
+	
+	public boolean isPartied(){
+		return !pLeader.isEmpty();
+	}
+	
+	public String getPartyLeader(){
+		return pLeader;
+	}
 
 	public String getOwner() {
 		return owner;
@@ -42,6 +51,10 @@ public class SpectatorContainer {
 
 	public boolean isFinished() {
 		return finished;
+	}
+	
+	public void party(String n){
+		pLeader = n;
 	}
 
 	public void finish(boolean forced) {

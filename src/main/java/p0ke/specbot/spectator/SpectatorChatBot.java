@@ -23,7 +23,6 @@ public class SpectatorChatBot extends SessionAdapter {
 				Message message = event.<ServerChatPacket> getPacket().getMessage();
 				String content = message.getFullText();
 				if (content.contains("has invited you to join") && !parent.isInParty()) {
-					parent.isPartied();
 					if(content.contains("'s")){
 						content = StringUtils.substringBeforeLast(content, "'s");
 						if(content.contains("join [")){
@@ -37,7 +36,10 @@ public class SpectatorChatBot extends SessionAdapter {
 						}
 						content = StringUtils.substringBefore(content, " has");
 					}
-					System.out.println("Partying with: " + content);
+					if(parent.getContainer().isPartied() && !content.equalsIgnoreCase(parent.getContainer().getPartyLeader())){
+						return;
+					}
+					parent.isPartied(content);
 					event.getSession().send(new ClientChatPacket("/p accept " + content));
 					Thread.sleep(1000);
 					if(parent.getContainer().sentIntro()){

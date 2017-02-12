@@ -74,6 +74,21 @@ public class SpectatorManager {
 		
 	}
 	
+	public String getPartiedSpectators(){
+		StringBuilder status = new StringBuilder();
+		for(Spectator s : spectators){
+			if(s.isInParty()){
+				status.append(s.getName() + ": " + s.getPartyLeader() + "\n");
+			}
+		}
+		if(!(status.length() == 0)){
+			status.setLength(status.length() - 1);
+			return status.toString();
+		} else {
+			return "No specs are currently in use!";
+		}
+	}
+	
 	public String recallContainer(String o){
 		for(SpectatorContainer c : containers){
 			if(c.getOwner().equalsIgnoreCase(o)){

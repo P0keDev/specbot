@@ -16,6 +16,7 @@ public class Spectator {
 	private String name;
 	private String username;
 	private String password;
+	private String pLeader = "";
 	private boolean inUse = false;
 	private boolean inParty = false;
 	private SpectatorContainer container = null;
@@ -33,8 +34,14 @@ public class Spectator {
 		inUse = true;
 	}
 	
-	public void isPartied(){
+	public void isPartied(String n){
 		inParty = true;
+		pLeader = n;
+		container.party(pLeader);
+	}
+	
+	public String getPartyLeader(){
+		return pLeader;
 	}
 
 	public String getName(){
@@ -57,6 +64,7 @@ public class Spectator {
 	public void finish(boolean forced) {
 		inUse = false;
 		inParty = false;
+		pLeader = "";
 		container = null;
 		if(forced){
 			client.getSession().send(new ClientChatPacket("/pchat Spectator session expired! Logging off."));

@@ -51,11 +51,16 @@ public class SpecCommand extends CommandBase {
 				}
 			} else
 			
+				
+			if(args.get(0).equalsIgnoreCase("list")){
+				msg.withQuote(SpecBot.instance.specManager.getPartiedSpectators()).build();
+			} else
 			
 			if(args.get(0).equalsIgnoreCase("help")){
 				StringBuilder builder = new StringBuilder();
 				builder.append("!spec help            Displays this message\n");
 				builder.append("!spec status          Displays all available and in-use bots\n");
+				builder.append("!spec list            Lists all bots in use\n");
 				builder.append("!spec request [#]     Requests # bots (if no # is specified, 2 are requested)\n");
 				builder.append("!spec recall          Recalls any bots you have requested");
 				msg.withQuote(builder.toString()).build();
