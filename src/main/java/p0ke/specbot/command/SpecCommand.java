@@ -5,6 +5,7 @@ import java.util.List;
 import p0ke.specbot.SpecBot;
 import p0ke.specbot.util.RMessageBuilder;
 import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.IChannel;
 
 public class SpecCommand extends CommandBase {
 
@@ -33,9 +34,9 @@ public class SpecCommand extends CommandBase {
 						return;
 					}
 				}
-				event.getMessage().getChannel().setTypingStatus(true);
-				msg.withContent(SpecBot.instance.specManager.requestSpectators(event.getMessage().getAuthor().getID(), n)).build();
-				event.getMessage().getChannel().setTypingStatus(false);
+				setTypingStatus(event.getMessage().getChannel(), true);
+				msg.withContent(SpecBot.instance.specManager.requestSpectators(event.getMessage().getAuthor().getID(), event.getMessage().getAuthor().getDisplayName(event.getMessage().getGuild()), n)).build();
+				setTypingStatus(event.getMessage().getChannel(), false);
 				
 			} else
 			
@@ -47,7 +48,11 @@ public class SpecCommand extends CommandBase {
 				
 			if(args.get(0).equalsIgnoreCase("forcerecall")){
 				if(event.getMessage().getAuthor().getID().equals("158865537848311809")){
-					SpecBot.instance.specManager.recallAll();
+					if(event.getMessage().getMentions().isEmpty()){
+						SpecBot.instance.specManager.recallAll();
+					} else {
+						SpecBot.instance.specManager.recallContainer(event.getMessage().getMentions().get(0).getID());
+					}
 				}
 			} else
 			
@@ -85,6 +90,15 @@ public class SpecCommand extends CommandBase {
 		}
 	}
 	
-	
+	public void setTypingStatus(IChannel c, boolean typing){
+		for(int i = 0; i < 5; i++){
+			try {
+				c.setTypingStatus(typing);
+				return;
+			} catch (Exception e){
+				
+			}
+		}
+	}
 
 }

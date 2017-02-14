@@ -10,13 +10,15 @@ public class SpectatorContainer {
 
 	private List<Spectator> spectators;
 	private String owner;
+	private String ownerName;
 	private String pLeader = "";
 	private boolean sentIntro = false;
 	private boolean finished = false;
 	private Timer timer = new Timer();
 
-	public SpectatorContainer(String o, List<Spectator> s) {
+	public SpectatorContainer(String o, String n, List<Spectator> s) {
 		owner = o;
+		ownerName = n;
 		spectators = s;
 		for (Spectator spec : spectators) {
 			spec.assignContainer(this);
@@ -47,6 +49,10 @@ public class SpectatorContainer {
 
 	public String getOwner() {
 		return owner;
+	}
+	
+	public String getOwnerName() {
+		return ownerName;
 	}
 
 	public boolean isFinished() {

@@ -16,7 +16,7 @@ public class Spectator {
 	private String name;
 	private String username;
 	private String password;
-	private String pLeader = "";
+	private String pLeader = "----";
 	private boolean inUse = false;
 	private boolean inParty = false;
 	private SpectatorContainer container = null;
@@ -64,7 +64,7 @@ public class Spectator {
 	public void finish(boolean forced) {
 		inUse = false;
 		inParty = false;
-		pLeader = "";
+		pLeader = "----";
 		container = null;
 		if(forced){
 			client.getSession().send(new ClientChatPacket("/pchat Spectator session expired! Logging off."));

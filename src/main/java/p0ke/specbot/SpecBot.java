@@ -1,5 +1,9 @@
 package p0ke.specbot;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+
 import p0ke.specbot.command.CommandHandler;
 import p0ke.specbot.spectator.SpectatorManager;
 import sx.blah.discord.Discord4J;
@@ -22,9 +26,21 @@ public class SpecBot {
 	public static void main(String[] args) throws Exception {
 
 		((Discord4J.Discord4JLogger) Discord4J.LOGGER).setLevel(Discord4J.Discord4JLogger.Level.INFO);
+		
+		String token = "";
+		try {
+			File tokenFile = new File("./token.txt");
+			BufferedReader br = new BufferedReader(new FileReader(tokenFile));
+			token = br.readLine();
+			br.close();
+		} catch (Exception e){
+			System.out.println("Failed to read token.txt. Stacktrace below:");
+			e.printStackTrace();
+			System.exit(1);
+		}
 
 		try {
-			instance = login("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+			instance = login(token);
 		} catch (Exception e) {
 			System.out.println("Failed to connect to server. Stacktrace below:");
 			e.printStackTrace();

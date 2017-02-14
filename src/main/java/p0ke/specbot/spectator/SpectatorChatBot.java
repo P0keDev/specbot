@@ -22,7 +22,7 @@ public class SpectatorChatBot extends SessionAdapter {
 			if (event.getPacket() instanceof ServerChatPacket) {
 				Message message = event.<ServerChatPacket> getPacket().getMessage();
 				String content = message.getFullText();
-				if (content.contains("has invited you to join") && !parent.isInParty()) {
+				if (content.contains("has invited you to join") && content.contains("party") && !parent.isInParty()) {
 					if(content.contains("'s")){
 						content = StringUtils.substringBeforeLast(content, "'s");
 						if(content.contains("join [")){

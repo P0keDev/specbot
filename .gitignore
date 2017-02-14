@@ -1,5 +1,6 @@
-# Contains login info
+# Contains alt/discord login info
 specs.txt
+token.txt
 
 # Windows image file caches
 Thumbs.db

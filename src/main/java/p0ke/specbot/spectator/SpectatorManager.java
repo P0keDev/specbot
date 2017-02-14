@@ -16,7 +16,7 @@ public class SpectatorManager {
 		loadSpectators();
 	}
 	
-	public String requestSpectators(String o, int n){
+	public String requestSpectators(String o, String on, int n){
 		try {
 		
 		for(SpectatorContainer c : containers){
@@ -39,7 +39,7 @@ public class SpectatorManager {
 			return "Not enough spectators available! Use !spec status and try again later!";
 		}
 		
-		containers.add(new SpectatorContainer(o, specsRequested));
+		containers.add(new SpectatorContainer(o, on, specsRequested));
 		
 		StringBuilder builder = new StringBuilder();
 		builder.append(specsRequested.get(0).getName());
@@ -77,8 +77,8 @@ public class SpectatorManager {
 	public String getPartiedSpectators(){
 		StringBuilder status = new StringBuilder();
 		for(Spectator s : spectators){
-			if(s.isInParty()){
-				status.append(s.getName() + ": " + s.getPartyLeader() + "\n");
+			if(s.isInUse()){
+				status.append(s.getName() + ": " + s.getPartyLeader() + " (Requested by: " + s.getContainer().getOwnerName() + ")\n");
 			}
 		}
 		if(!(status.length() == 0)){
