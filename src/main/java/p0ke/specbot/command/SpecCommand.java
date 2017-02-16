@@ -93,7 +93,7 @@ public class SpecCommand extends CommandBase {
 			if(args.get(0).equalsIgnoreCase("help")){
 				StringBuilder builder = new StringBuilder();
 				builder.append("!spec help            Displays this message\n");
-				builder.append("!spec stats           Displays spec bot usage stats");
+				builder.append("!spec stats           Displays spec bot usage stats\n");
 				builder.append("!spec status          Displays all available and in-use bots\n");
 				builder.append("!spec list            Lists all bots in use\n");
 				builder.append("!spec request [#]     Requests # bots (if no # is specified, 2 are requested)\n");
