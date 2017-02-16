@@ -20,6 +20,9 @@ public class SpectatorContainer {
 		owner = o;
 		ownerName = n;
 		spectators = s;
+		SpecBot.instance.usageStats.addContainersRequested(1);
+		SpecBot.instance.usageStats.addSpecsRequested(spectators.size());
+		SpecBot.instance.usageStats.save();
 		for (Spectator spec : spectators) {
 			spec.assignContainer(this);
 			spec.login();
@@ -60,16 +63,22 @@ public class SpectatorContainer {
 	}
 	
 	public void party(String n){
-		pLeader = n;
+		if(pLeader.isEmpty()){
+			pLeader = n;
+			SpecBot.instance.usageStats.addPartiesJoined(1);
+			SpecBot.instance.usageStats.save();
+		}
 	}
 
 	public void finish(boolean forced) {
 		finished = true;
 		timer.cancel();
 		for (Spectator spec : spectators) {
+			SpecBot.instance.usageStats.addIngameTime(spec.getIngameTime());
 			spec.finish(forced);
 			forced = false;
 		}
+		SpecBot.instance.usageStats.save();
 		SpecBot.instance.specManager.removeContainer(this);
 
 	}

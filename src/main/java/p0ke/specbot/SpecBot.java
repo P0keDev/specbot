@@ -6,6 +6,7 @@ import java.io.FileReader;
 
 import p0ke.specbot.command.CommandHandler;
 import p0ke.specbot.spectator.SpectatorManager;
+import p0ke.specbot.util.UsageStats;
 import sx.blah.discord.Discord4J;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
@@ -22,6 +23,8 @@ public class SpecBot {
 	
 	public CommandHandler commandHandler;
 	public SpectatorManager specManager;
+	
+	public UsageStats usageStats;
 
 	public static void main(String[] args) throws Exception {
 
@@ -54,6 +57,8 @@ public class SpecBot {
 		
 		commandHandler = new CommandHandler();
 		specManager = new SpectatorManager();
+		
+		usageStats = UsageStats.getStatsFromFile();
 		
 		client.changeStatus(Status.game("Smash Heroes"));
 		

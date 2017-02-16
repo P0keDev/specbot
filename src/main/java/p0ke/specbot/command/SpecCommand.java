@@ -1,11 +1,17 @@
 package p0ke.specbot.command;
 
+import java.awt.Color;
+import java.time.LocalDateTime;
 import java.util.List;
+
+import org.joda.time.Duration;
 
 import p0ke.specbot.SpecBot;
 import p0ke.specbot.util.RMessageBuilder;
+import p0ke.specbot.util.UsageStats;
 import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.util.EmbedBuilder;
 
 public class SpecCommand extends CommandBase {
 
@@ -18,6 +24,29 @@ public class SpecCommand extends CommandBase {
 			} else
 			
 			
+			if(args.get(0).equalsIgnoreCase("stats")){
+				EmbedBuilder eb = new EmbedBuilder();
+				UsageStats stats = SpecBot.instance.usageStats;
+				eb.ignoreNullEmptyFields();
+				eb.withTitle("SpecBot Usage Stats");
+				eb.withDesc("------------------------");
+				
+				eb.appendField("Total requests", "" + stats.getContainersRequested(), true);
+				eb.appendField("Specs requested", "" + stats.getSpecsRequested(), true);
+				//eb.appendField("\u200B", "\u200B", true);
+				//eb.appendField("Parties joined", "" + stats.getPartiesJoined(), true);
+				eb.appendField("Games spectated", "" + stats.getGamesJoined(), true);
+				//eb.appendField("\u200B", "\u200B", true);
+				Duration dur = stats.getIngameTime();
+				eb.appendField("Time in-game", dur.getStandardDays() + "D:" + (dur.getStandardHours() % 24) + "H:" + (dur.getStandardMinutes() % 60) + "M:" + (dur.getStandardSeconds() % 60) + "S", true);
+				eb.withColor(new Color(64, 128, 234));
+				eb.withFooterIcon("http://i.imgur.com/RKJxOlH.png");
+				eb.withFooterText("SpecBot");
+				eb.withTimestamp(LocalDateTime.now());
+				event.getMessage().getChannel().sendMessage("", eb.build(), false);
+			} else
+				
+				
 			if(args.get(0).equalsIgnoreCase("request")){
 				int n = 2;
 				
@@ -42,16 +71,16 @@ public class SpecCommand extends CommandBase {
 			
 			
 			if(args.get(0).equalsIgnoreCase("recall")){
-				msg.withContent(SpecBot.instance.specManager.recallContainer(event.getMessage().getAuthor().getID())).build();
+				msg.withContent(SpecBot.instance.specManager.recallContainer(event.getMessage().getAuthor().getID(), false)).build();
 			} else
-			
+				
 				
 			if(args.get(0).equalsIgnoreCase("forcerecall")){
 				if(event.getMessage().getAuthor().getID().equals("158865537848311809")){
 					if(event.getMessage().getMentions().isEmpty()){
 						SpecBot.instance.specManager.recallAll();
 					} else {
-						SpecBot.instance.specManager.recallContainer(event.getMessage().getMentions().get(0).getID());
+						SpecBot.instance.specManager.recallContainer(event.getMessage().getMentions().get(0).getID(), true);
 					}
 				}
 			} else
@@ -64,6 +93,7 @@ public class SpecCommand extends CommandBase {
 			if(args.get(0).equalsIgnoreCase("help")){
 				StringBuilder builder = new StringBuilder();
 				builder.append("!spec help            Displays this message\n");
+				builder.append("!spec stats           Displays spec bot usage stats");
 				builder.append("!spec status          Displays all available and in-use bots\n");
 				builder.append("!spec list            Lists all bots in use\n");
 				builder.append("!spec request [#]     Requests # bots (if no # is specified, 2 are requested)\n");

@@ -8,6 +8,8 @@ import org.spacehq.packetlib.event.session.DisconnectedEvent;
 import org.spacehq.packetlib.event.session.PacketReceivedEvent;
 import org.spacehq.packetlib.event.session.SessionAdapter;
 
+import p0ke.specbot.SpecBot;
+
 public class SpectatorChatBot extends SessionAdapter {
 	
 	private Spectator parent;
@@ -49,6 +51,7 @@ public class SpectatorChatBot extends SessionAdapter {
 				
 				if(content.contains("                              Smash Heroes")){
 					event.getSession().send(new ClientChatPacket("/lobby smash"));
+					SpecBot.instance.usageStats.addGamesJoined(1);
 				}
 				
 				if(content.endsWith("has disbanded the party!") || content.startsWith("You have been kicked from the party") || content.endsWith("the party has been disbanded.")){

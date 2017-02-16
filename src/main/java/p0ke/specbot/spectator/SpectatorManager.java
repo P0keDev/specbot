@@ -89,10 +89,10 @@ public class SpectatorManager {
 		}
 	}
 	
-	public String recallContainer(String o){
+	public String recallContainer(String o, boolean force){
 		for(SpectatorContainer c : containers){
 			if(c.getOwner().equalsIgnoreCase(o)){
-				c.finish(false);
+				c.finish(force);
 				containers.remove(c);
 				return "Recalled spectators!";
 			}
@@ -128,8 +128,10 @@ public class SpectatorManager {
 			String line;
 			while((line = reader.readLine()) != null) {
 				try {
-					String parts[] = line.split(":");
-					spectators.add(new Spectator(parts[0], parts[1], parts[2]));
+					if(!line.startsWith("//")){
+						String parts[] = line.split(":");
+						spectators.add(new Spectator(parts[0], parts[1], parts[2]));
+					}
 				} catch (Exception e) {
 					
 				}

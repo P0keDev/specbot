@@ -4,6 +4,8 @@ import java.net.Proxy;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.spacehq.mc.auth.exception.request.RequestException;
 import org.spacehq.mc.protocol.MinecraftConstants;
 import org.spacehq.mc.protocol.MinecraftProtocol;
@@ -21,6 +23,7 @@ public class Spectator {
 	private boolean inParty = false;
 	private SpectatorContainer container = null;
 	private Client client;
+	private DateTime login;
 	Timer timer = new Timer();
 
 	public Spectator(String n, String u, String p) {
@@ -60,6 +63,10 @@ public class Spectator {
 		return container;
 	}
 	
+	public Duration getIngameTime(){
+		return new Duration(login, DateTime.now());
+	}
+	
 	
 	public void finish(boolean forced) {
 		inUse = false;
@@ -91,6 +98,7 @@ public class Spectator {
 		client.getSession().setFlag(MinecraftConstants.AUTH_PROXY_KEY, Proxy.NO_PROXY);
 		client.getSession().addListener(new SpectatorChatBot(this));
 		client.getSession().connect();
+		login = DateTime.now();
 	}
 	
 	class DisconnectTimer extends TimerTask {
