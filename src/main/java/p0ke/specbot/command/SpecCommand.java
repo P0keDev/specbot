@@ -33,17 +33,17 @@ public class SpecCommand extends CommandBase {
 				
 				eb.appendField("Total requests", "" + stats.getContainersRequested(), true);
 				eb.appendField("Specs requested", "" + stats.getSpecsRequested(), true);
-				//eb.appendField("\u200B", "\u200B", true);
+				eb.appendField("\u200B", "\u200B", true);
 				//eb.appendField("Parties joined", "" + stats.getPartiesJoined(), true);
 				eb.appendField("Games spectated", "" + stats.getGamesJoined(), true);
-				//eb.appendField("\u200B", "\u200B", true);
 				Duration dur = stats.getIngameTime();
 				eb.appendField("Time in-game", dur.getStandardDays() + "D:" + (dur.getStandardHours() % 24) + "H:" + (dur.getStandardMinutes() % 60) + "M:" + (dur.getStandardSeconds() % 60) + "S", true);
+				eb.appendField("\u200B", "\u200B", true);
 				eb.withColor(new Color(64, 128, 234));
 				eb.withFooterIcon("http://i.imgur.com/RKJxOlH.png");
 				eb.withFooterText("SpecBot");
 				eb.withTimestamp(LocalDateTime.now());
-				event.getMessage().getChannel().sendMessage("", eb.build(), false);
+				msg.withEmbed(eb.build()).build();
 			} else
 				
 				
