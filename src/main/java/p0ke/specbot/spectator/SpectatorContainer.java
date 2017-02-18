@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+
 import p0ke.specbot.SpecBot;
 
 public class SpectatorContainer {
@@ -15,6 +18,7 @@ public class SpectatorContainer {
 	private boolean sentIntro = false;
 	private boolean finished = false;
 	private Timer timer = new Timer();
+	private DateTime lastGameStart = new DateTime(0);
 
 	public SpectatorContainer(String o, String n, List<Spectator> s) {
 		owner = o;
@@ -68,6 +72,16 @@ public class SpectatorContainer {
 			SpecBot.instance.usageStats.addPartiesJoined(1);
 			SpecBot.instance.usageStats.save();
 		}
+	}
+	
+	public void registerGame(DateTime dt){
+		Duration duration = new Duration(lastGameStart, dt);
+		if(duration.getStandardSeconds() > 12){ //if game is different
+			lastGameStart = dt;
+			SpecBot.instance.usageStats.addGamesJoined(1);
+			SpecBot.instance.usageStats.save();
+		}
+		
 	}
 
 	public void finish(boolean forced) {
