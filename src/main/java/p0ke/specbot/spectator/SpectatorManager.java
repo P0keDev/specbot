@@ -42,10 +42,10 @@ public class SpectatorManager {
 		containers.add(new SpectatorContainer(o, on, specsRequested));
 		
 		StringBuilder builder = new StringBuilder();
-		builder.append(specsRequested.get(0).getName());
+		builder.append(specsRequested.get(0).getName().replace("_", "\\_"));
 		if(specsRequested.size() > 1){
 			builder.append(" and ");
-			builder.append(specsRequested.get(1).getName());
+			builder.append(specsRequested.get(1).getName().replace("_", "\\_"));
 			builder.append(" are ");
 		} else {
 			builder.append(" is ");
