@@ -4,7 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
-import p0ke.specbot.command.CommandHandler;
+import p0ke.specbot.command.discord.DCommandHandler;
+import p0ke.specbot.command.hypixel.GCommandHandler;
 import p0ke.specbot.spectator.SpectatorManager;
 import p0ke.specbot.util.UsageStats;
 import sx.blah.discord.Discord4J;
@@ -12,16 +13,21 @@ import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
+import sx.blah.discord.handle.impl.events.NickNameChangeEvent;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Status;
 import sx.blah.discord.util.DiscordException;
+import sx.blah.discord.util.MissingPermissionsException;
+import sx.blah.discord.util.RateLimitException;
 
 public class SpecBot {
 
 	public static SpecBot instance;
 	public IDiscordClient client;
 	
-	public CommandHandler commandHandler;
+	public DCommandHandler discordCommandHandler;
+	public GCommandHandler guildCommandHandler;
 	public SpectatorManager specManager;
 	
 	public UsageStats usageStats;
@@ -55,7 +61,8 @@ public class SpecBot {
 	@EventSubscriber
 	public void handle(ReadyEvent event){
 		
-		commandHandler = new CommandHandler();
+		discordCommandHandler = new DCommandHandler();
+		guildCommandHandler = new GCommandHandler();
 		specManager = new SpectatorManager();
 		
 		usageStats = UsageStats.getStatsFromFile();
@@ -67,10 +74,13 @@ public class SpecBot {
 		
 	}
 	
+	
+	
+	
 	@EventSubscriber
 	public void onMessage(MessageReceivedEvent event){
 		if(event.getMessage().getContent().startsWith("!") || event.getMessage().getContent().startsWith("/")){
-			commandHandler.handleCommand(event);
+			discordCommandHandler.handleCommand(event);
 		}
 	}
 	

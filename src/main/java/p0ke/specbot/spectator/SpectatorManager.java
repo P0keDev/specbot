@@ -113,6 +113,14 @@ public class SpectatorManager {
 	
 	
 	public void loadSpectators(){
+		for(Spectator spec : spectators){
+			spec.finish(true);
+			if(spec.isGuildBot()){
+				spec.kill();
+				spec.guildBotFinish();
+			}
+			
+		}
 		spectators.clear();
 		File specList = new File("./specs.txt");
 		if(!specList.exists()){
@@ -130,7 +138,7 @@ public class SpectatorManager {
 				try {
 					if(!line.startsWith("//")){
 						String parts[] = line.split(":");
-						spectators.add(new Spectator(parts[0], parts[1], parts[2]));
+						spectators.add(new Spectator(parts[0].replace("$", ""), parts[1], parts[2], line.startsWith("$")));
 					}
 				} catch (Exception e) {
 					

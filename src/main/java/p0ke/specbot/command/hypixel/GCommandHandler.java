@@ -1,4 +1,4 @@
-package p0ke.specbot.command;
+package p0ke.specbot.command.hypixel;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,17 +9,17 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.spacehq.packetlib.event.session.PacketReceivedEvent;
 
-import p0ke.specbot.util.RMessageBuilder;
-import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
+import p0ke.specbot.command.hypixel.GCommandBase;
 
-public class CommandHandler {
+public class GCommandHandler {
 
-	private static HashMap<String, CommandBase> commandRegistry = new HashMap<String, CommandBase>();
+	private static HashMap<String, GCommandBase> commandRegistry = new HashMap<String, GCommandBase>();
 	private static List<String> cNames = new ArrayList<String>();
 
-	public CommandHandler() {
-		File commandList = new File("./commands.txt");
+	public GCommandHandler() {
+		File commandList = new File("./guildcommands.txt");
 		if (!commandList.exists()) {
 			try {
 				commandList.createNewFile();
@@ -33,8 +33,9 @@ public class CommandHandler {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				String parts[] = line.split(":");
-				CommandBase ctr = (CommandBase) Class.forName("p0ke.specbot.command." + parts[parts.length - 1])
-						.getConstructor().newInstance();
+				GCommandBase ctr = (GCommandBase) Class
+						.forName("p0ke.specbot.command.hypixel." + parts[parts.length - 1]).getConstructor()
+						.newInstance();
 				StringBuilder builder = new StringBuilder();
 				for (int i = 0; i < (parts.length - 1); i++) {
 					commandRegistry.put(parts[i].toLowerCase(), ctr);
@@ -43,7 +44,7 @@ public class CommandHandler {
 				builder.setLength(builder.length() - 1);
 				cNames.add(builder.toString());
 			}
-			System.out.println("Registered " + commandRegistry.size() + " commands!");
+			System.out.println("Registered " + commandRegistry.size() + " hypixel commands!");
 			reader.close();
 
 		} catch (Exception e) {
@@ -52,23 +53,17 @@ public class CommandHandler {
 
 	}
 
-	public void handleCommand(MessageReceivedEvent event) {
+	public void handleCommand(PacketReceivedEvent event, String content) {
 		try {
-			List<String> args = Arrays
-					.asList(StringUtils.substringAfter(event.getMessage().getContent(), " ").split(" "));
+			List<String> args = Arrays.asList(StringUtils.substringAfter(content, " ").split(" "));
 			if (args.size() == 1 && args.get(0).isEmpty()) {
 				args = new ArrayList<String>();
 			}
-			String command = event.getMessage().getContent().split(" ")[0].substring(1).toLowerCase();
-			RMessageBuilder msg = new RMessageBuilder(event.getClient()).withChannel(event.getMessage().getChannel());
+			String command = content.split(" ")[0].substring(1).toLowerCase();
 
 			if (commandRegistry.containsKey(command)) {
-				commandRegistry.get(command).run(args, event, msg);
-				try {
-					event.getMessage().delete();
-				} catch (Exception e) {
+				commandRegistry.get(command).run(args, event);
 
-				}
 			}
 
 		} catch (Exception e) {

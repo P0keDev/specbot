@@ -1,4 +1,4 @@
-package p0ke.specbot.command;
+package p0ke.specbot.command.discord;
 
 import java.awt.Color;
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.util.EmbedBuilder;
 
-public class SpecCommand extends CommandBase {
+public class SpecCommand extends DCommandBase {
 
 	@Override
 	public void run(List<String> args, MessageReceivedEvent event, RMessageBuilder msg) throws Exception {

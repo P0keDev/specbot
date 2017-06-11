@@ -11,6 +11,7 @@ import org.spacehq.mc.protocol.MinecraftConstants;
 import org.spacehq.mc.protocol.MinecraftProtocol;
 import org.spacehq.mc.protocol.packet.ingame.client.ClientChatPacket;
 import org.spacehq.packetlib.Client;
+import org.spacehq.packetlib.event.session.SessionListener;
 import org.spacehq.packetlib.tcp.TcpSessionFactory;
 
 public class Spectator {
@@ -19,17 +20,27 @@ public class Spectator {
 	private String username;
 	private String password;
 	private String pLeader = "----";
+	private boolean guildBot = false;
 	private boolean inUse = false;
 	private boolean inParty = false;
 	private SpectatorContainer container = null;
 	private Client client;
+	private SessionListener specListener = null;
+	private SessionListener guildListener = null;
 	private DateTime login;
 	Timer timer = new Timer();
 
-	public Spectator(String n, String u, String p) {
+	public Spectator(String n, String u, String p, boolean gbot) {
 		name = n;
 		username = u;
 		password = p;
+		guildBot = gbot;
+		specListener = new SpectatorChatBot(this);
+		if(guildBot){
+			guildListener = new GuildChatBot(this);
+			guildBotLogin();
+			timer.schedule(new RelogTimer(this), 3600000, 3600000);
+		}
 	}
 
 	public void assignContainer(SpectatorContainer c) {
@@ -59,6 +70,10 @@ public class Spectator {
 		return inParty;
 	}
 	
+	public boolean isGuildBot(){
+		return guildBot;
+	}
+	
 	public SpectatorContainer getContainer(){
 		return container;
 	}
@@ -77,18 +92,43 @@ public class Spectator {
 			client.getSession().send(new ClientChatPacket("/pchat Spectator session expired! Logging off."));
 		}
 		client.getSession().send(new ClientChatPacket("/p leave"));
-		try {
-			timer.schedule(new DisconnectTimer(client), 500);
-		} catch (Exception e){
-			e.printStackTrace();
+		if(!guildBot){
+			try {
+				timer.schedule(new DisconnectTimer(client), 500);
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		} else {
+			client.getSession().removeListener(specListener);
 		}
 	}
 
 	public void login() {
+		if(!guildBot){
+			MinecraftProtocol protocol = null;
+			try {
+				protocol = new MinecraftProtocol(username, password, false);
+				System.out.println("Successfully authenticated user.");
+			} catch (RequestException e) {
+				e.printStackTrace();
+				return;
+			}
+	
+			client = new Client("mc.hypixel.net", 25565, protocol, new TcpSessionFactory(Proxy.NO_PROXY));
+			client.getSession().setFlag(MinecraftConstants.AUTH_PROXY_KEY, Proxy.NO_PROXY);
+			client.getSession().connect();
+		}
+		
+		client.getSession().addListener(specListener);
+		login = DateTime.now();
+		
+	}
+	
+	public void guildBotLogin(){
 		MinecraftProtocol protocol = null;
 		try {
 			protocol = new MinecraftProtocol(username, password, false);
-			System.out.println("Successfully authenticated user.");
+			System.out.println("Successfully authenticated guild bot.");
 		} catch (RequestException e) {
 			e.printStackTrace();
 			return;
@@ -96,9 +136,21 @@ public class Spectator {
 
 		client = new Client("mc.hypixel.net", 25565, protocol, new TcpSessionFactory(Proxy.NO_PROXY));
 		client.getSession().setFlag(MinecraftConstants.AUTH_PROXY_KEY, Proxy.NO_PROXY);
-		client.getSession().addListener(new SpectatorChatBot(this));
+		client.getSession().addListener(guildListener);
 		client.getSession().connect();
-		login = DateTime.now();
+	}
+	
+	public void guildBotFinish(){
+		client.getSession().disconnect("Guild bot relog!");
+	}
+	
+	public void guildBotRelog(){
+		guildBotFinish();
+		guildBotLogin();
+	}
+	
+	public void kill(){
+		timer.cancel();
 	}
 	
 	class DisconnectTimer extends TimerTask {
@@ -112,6 +164,21 @@ public class Spectator {
 		@Override
 		public void run() {
 			caller.getSession().disconnect("Finished!");
+		}
+		
+	}
+	
+	class RelogTimer extends TimerTask {
+
+		Spectator parent;
+		
+		public RelogTimer(Spectator s){
+			parent = s;
+		}
+		
+		@Override
+		public void run() {
+			parent.guildBotRelog();
 		}
 		
 	}
