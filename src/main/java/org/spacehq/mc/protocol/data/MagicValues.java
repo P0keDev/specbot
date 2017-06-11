@@ -138,6 +138,7 @@ public class MagicValues {
         register(MetadataType.BLOCK_FACE, 10);
         register(MetadataType.OPTIONAL_UUID, 11);
         register(MetadataType.BLOCK_STATE, 12);
+        register(MetadataType.NBT_TAG, 13);
 
         register(HandshakeIntent.STATUS, 1);
         register(HandshakeIntent.LOGIN, 2);
@@ -509,6 +510,8 @@ public class MagicValues {
         register(UpdatedTileType.STRUCTURE_BLOCK, 7);
         register(UpdatedTileType.END_GATEWAY, 8);
         register(UpdatedTileType.SIGN, 9);
+        register(UpdatedTileType.SHULKER_BOX, 10);
+        register(UpdatedTileType.BED, 11);
 
         register(ClientNotification.INVALID_BED, 0);
         register(ClientNotification.START_RAIN, 2);
@@ -640,6 +643,11 @@ public class MagicValues {
         register(NoteBlockValueType.SNARE_DRUM, 2);
         register(NoteBlockValueType.HI_HAT, 3);
         register(NoteBlockValueType.BASS_DRUM, 4);
+        register(NoteBlockValueType.FLUTE, 5);
+        register(NoteBlockValueType.BELL, 6);
+        register(NoteBlockValueType.GUITAR, 7);
+        register(NoteBlockValueType.CHIME, 8);
+        register(NoteBlockValueType.XYLOPHONE, 9);
 
         register(PistonValueType.PUSHING, 0);
         register(PistonValueType.PULLING, 1);

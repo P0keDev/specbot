@@ -9,5 +9,7 @@ public enum UpdatedTileType {
     BANNER,
     STRUCTURE_BLOCK,
     END_GATEWAY,
-    SIGN;
+    SIGN,
+    SHULKER_BOX,
+    BED;
 }
