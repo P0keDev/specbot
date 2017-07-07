@@ -58,7 +58,7 @@ public class SpecCommand extends CommandBase {
 						return;
 					}
 					
-					if(n > 2 || n < 1){
+					if((n > 2 || n < 1) && !event.getMessage().getAuthor().getID().equals(("158865537848311809"))){
 						msg.withContent("You can only request 1 or 2 bots!").build();
 						return;
 					}
@@ -121,10 +121,10 @@ public class SpecCommand extends CommandBase {
 	}
 	
 	public void setTypingStatus(IChannel c, boolean typing){
-		for(int i = 0; i < 5; i++){
+		for(int i = 0; i < 3; i++){
 			try {
 				c.setTypingStatus(typing);
-				return;
+				//return;
 			} catch (Exception e){
 				
 			}

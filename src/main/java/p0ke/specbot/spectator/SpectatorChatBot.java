@@ -9,6 +9,8 @@ import org.spacehq.packetlib.event.session.DisconnectedEvent;
 import org.spacehq.packetlib.event.session.PacketReceivedEvent;
 import org.spacehq.packetlib.event.session.SessionAdapter;
 
+import p0ke.specbot.util.EmojiMovieCountdown;
+
 public class SpectatorChatBot extends SessionAdapter {
 
 	private Spectator parent;
@@ -23,9 +25,13 @@ public class SpectatorChatBot extends SessionAdapter {
 			if (event.getPacket() instanceof ServerChatPacket) {
 				Message message = event.<ServerChatPacket> getPacket().getMessage();
 				String content = message.getFullText();
+				if(content.contains("Friend request from")){
+					System.out.println(content);
+				}
 				if (!content.contains(":")) {
 					if (content.contains("has invited you to join") && content.contains("party")
 							&& !parent.isInParty()) {
+						content = content.replaceAll("-", "").trim();
 						if (content.contains("'s")) {
 							content = StringUtils.substringBeforeLast(content, "'s");
 							if (content.contains("join [")) {
@@ -53,6 +59,7 @@ public class SpectatorChatBot extends SessionAdapter {
 					}
 
 					if (content.contains("                              Smash Heroes")) {
+						
 						event.getSession().send(new ClientChatPacket("/lobby smash"));
 						parent.getContainer().registerGame(DateTime.now());
 					}
@@ -65,6 +72,15 @@ public class SpectatorChatBot extends SessionAdapter {
 						}
 					}
 
+				} else if(content.startsWith("From")){
+					event.getSession().send(new ClientChatPacket(
+							"/r " + EmojiMovieCountdown.getCountdown()));
+					
+				} else if(content.startsWith("§m---") && content.contains("Friend request from")){ // Why must this message have a : hypixel please fix this
+					content = StringUtils.substringAfterLast(StringUtils.substringBeforeLast(content, "Click").trim(), " ").trim();
+					event.getSession().send(new ClientChatPacket(
+							"/f " + content));
+					
 				}
 			}
 		} catch (Exception e) {

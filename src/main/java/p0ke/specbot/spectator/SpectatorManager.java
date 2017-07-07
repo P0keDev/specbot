@@ -42,10 +42,14 @@ public class SpectatorManager {
 		containers.add(new SpectatorContainer(o, on, specsRequested));
 		
 		StringBuilder builder = new StringBuilder();
-		builder.append(specsRequested.get(0).getName().replace("_", "\\_"));
+		builder.append(specsRequested.get(specsRequested.size() - 1).getName().replace("_", "\\_"));
+		for(int i = specsRequested.size() - 2; i > 0; i--){
+			builder.append(", ");
+			builder.append(specsRequested.get(i).getName().replace("_", "\\_"));
+		}
 		if(specsRequested.size() > 1){
 			builder.append(" and ");
-			builder.append(specsRequested.get(1).getName().replace("_", "\\_"));
+			builder.append(specsRequested.get(0).getName().replace("_", "\\_"));
 			builder.append(" are ");
 		} else {
 			builder.append(" is ");
