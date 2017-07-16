@@ -11,8 +11,7 @@ public class EmojiMovieCommand extends CommandBase {
 	@Override
 	public void run(List<String> args, MessageReceivedEvent event, RMessageBuilder msg) throws Exception {
 
-		msg.withContent(EmojiMovieCountdown.getCountdown()).build();
-		
+		msg.withContent(EmojiMovieCountdown.getCountdown()).build();		
 	}
 
 }

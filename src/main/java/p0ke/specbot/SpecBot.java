@@ -17,6 +17,10 @@ import sx.blah.discord.handle.obj.Status;
 import sx.blah.discord.util.DiscordException;
 
 public class SpecBot {
+	
+	public static String DISCORD_TOKEN;
+	public static String HYPIXEL_API_KEY;
+	public static String PASTEBIN_API_KEY;
 
 	public static SpecBot instance;
 	public IDiscordClient client;
@@ -30,11 +34,13 @@ public class SpecBot {
 
 		((Discord4J.Discord4JLogger) Discord4J.LOGGER).setLevel(Discord4J.Discord4JLogger.Level.INFO);
 		
-		String token = "";
+		
 		try {
 			File tokenFile = new File("./token.txt");
 			BufferedReader br = new BufferedReader(new FileReader(tokenFile));
-			token = br.readLine();
+			DISCORD_TOKEN = br.readLine();
+			HYPIXEL_API_KEY = br.readLine();
+			PASTEBIN_API_KEY = br.readLine();
 			br.close();
 		} catch (Exception e){
 			System.out.println("Failed to read token.txt. Stacktrace below:");
@@ -43,7 +49,7 @@ public class SpecBot {
 		}
 
 		try {
-			instance = login(token);
+			instance = login(DISCORD_TOKEN);
 		} catch (Exception e) {
 			System.out.println("Failed to connect to server. Stacktrace below:");
 			e.printStackTrace();
