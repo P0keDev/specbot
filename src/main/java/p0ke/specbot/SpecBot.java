@@ -3,6 +3,8 @@ package p0ke.specbot;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import p0ke.specbot.command.CommandHandler;
 import p0ke.specbot.spectator.SpectatorManager;
@@ -29,6 +31,8 @@ public class SpecBot {
 	public SpectatorManager specManager;
 	
 	public UsageStats usageStats;
+	
+	public List<String> banList = new ArrayList<String>();
 
 	public static void main(String[] args) throws Exception {
 
@@ -65,6 +69,20 @@ public class SpecBot {
 		specManager = new SpectatorManager();
 		
 		usageStats = UsageStats.getStatsFromFile();
+		
+		try {
+			File banFile = new File("./bans.txt");
+			BufferedReader br = new BufferedReader(new FileReader(banFile));
+			String line;
+			while((line = br.readLine()) != null){
+				banList.add(line.toLowerCase());
+			}
+			br.close();
+		} catch (Exception e){
+			System.out.println("Failed to read bans.txt. Stacktrade below:");
+			e.printStackTrace();
+			System.exit(1);
+		}
 		
 		client.changeStatus(Status.game("Smash Heroes"));
 		
