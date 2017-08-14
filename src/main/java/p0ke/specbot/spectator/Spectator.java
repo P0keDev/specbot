@@ -1,15 +1,15 @@
 package p0ke.specbot.spectator;
 
 import java.net.Proxy;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.spacehq.mc.auth.exception.request.RequestException;
 import org.spacehq.mc.protocol.MinecraftConstants;
 import org.spacehq.mc.protocol.MinecraftProtocol;
-import org.spacehq.mc.protocol.packet.ingame.client.ClientChatPacket;
 import org.spacehq.packetlib.Client;
 import org.spacehq.packetlib.tcp.TcpSessionFactory;
 
@@ -21,6 +21,8 @@ public class Spectator {
 	private String pLeader = "----";
 	private boolean inUse = false;
 	private boolean inParty = false;
+	private boolean disconnecting = false;
+	private List<String> messages = new ArrayList<String>();
 	private SpectatorContainer container = null;
 	private Client client;
 	private DateTime login;
@@ -67,6 +69,18 @@ public class Spectator {
 		return new Duration(login, DateTime.now());
 	}
 	
+	public boolean isDisconnecting(){
+		return disconnecting;
+	}
+	
+	public void sendMessage(String msg){
+		messages.add(msg);
+	}
+	
+	public List<String> getMessages(){
+		return messages;
+	}
+	
 	
 	public void finish(boolean forced) {
 		inUse = false;
@@ -74,14 +88,15 @@ public class Spectator {
 		pLeader = "----";
 		container = null;
 		if(forced){
-			client.getSession().send(new ClientChatPacket("/pchat Spectator session expired! Logging off."));
+			sendMessage("/pchat Spectator session expired! Logging off.");
 		}
-		client.getSession().send(new ClientChatPacket("/p leave"));
-		try {
-			timer.schedule(new DisconnectTimer(client), 500);
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		sendMessage("/p leave");
+		disconnecting = true;
+	}
+	
+	public void disconnect(){
+		disconnecting = false;
+		client.getSession().disconnect("Finished!");
 	}
 
 	public void login() {
@@ -101,19 +116,5 @@ public class Spectator {
 		login = DateTime.now();
 	}
 	
-	class DisconnectTimer extends TimerTask {
-		Client caller;
-		
-		public DisconnectTimer(Client c){
-			caller = c;
-		}
-		
-		
-		@Override
-		public void run() {
-			caller.getSession().disconnect("Finished!");
-		}
-		
-	}
 
 }

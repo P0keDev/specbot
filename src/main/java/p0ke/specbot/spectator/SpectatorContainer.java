@@ -2,7 +2,6 @@ package p0ke.specbot.spectator;
 
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
@@ -31,8 +30,6 @@ public class SpectatorContainer {
 			spec.assignContainer(this);
 			spec.login();
 		}
-
-		timer.schedule(new ExpireTimer(this), 45 * 60 * 1000);
 		
 
 	}
@@ -97,18 +94,5 @@ public class SpectatorContainer {
 
 	}
 
-	public class ExpireTimer extends TimerTask {
-		SpectatorContainer caller;
-
-		public ExpireTimer(SpectatorContainer c) {
-			caller = c;
-		}
-
-		@Override
-		public void run() {
-			caller.finish(true);
-		}
-
-	}
 
 }

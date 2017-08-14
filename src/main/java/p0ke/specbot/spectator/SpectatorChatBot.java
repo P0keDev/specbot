@@ -7,6 +7,8 @@ import org.joda.time.DateTime;
 import org.spacehq.mc.protocol.data.message.Message;
 import org.spacehq.mc.protocol.packet.ingame.client.ClientChatPacket;
 import org.spacehq.mc.protocol.packet.ingame.server.ServerChatPacket;
+import org.spacehq.mc.protocol.packet.ingame.server.ServerKeepAlivePacket;
+import org.spacehq.mc.protocol.packet.ingame.server.scoreboard.ServerDisplayScoreboardPacket;
 import org.spacehq.packetlib.event.session.DisconnectedEvent;
 import org.spacehq.packetlib.event.session.PacketReceivedEvent;
 import org.spacehq.packetlib.event.session.SessionAdapter;
@@ -45,42 +47,38 @@ public class SpectatorChatBot extends SessionAdapter {
 							}
 							content = StringUtils.substringBefore(content, " has");
 						}
-						
-						if(SpecBot.instance.banList.contains(content.toLowerCase())){
+
+						if (SpecBot.instance.banList.contains(content.toLowerCase())) {
 							return;
 						}
-						
+
 						if (parent.getContainer().isPartied()
 								&& !content.equalsIgnoreCase(parent.getContainer().getPartyLeader())) {
 							return;
 						}
 						parent.isPartied(content);
-						event.getSession().send(new ClientChatPacket("/p accept " + content));
-						Thread.sleep(1000);
+						parent.sendMessage("/p accept " + content);
 						if (parent.getContainer().sentIntro()) {
-							event.getSession().send(new ClientChatPacket(
-									"/pchat I'm SmashHeroesSpec, an automatic 1v1 spectator bot!"));
-							Thread.sleep(500);
-							event.getSession().send(new ClientChatPacket(
-									"/p list"));
+							parent.sendMessage("/pchat I'm SmashHeroesSpec, an automatic 1v1 spectator bot!");
+							parent.sendMessage("/p list");
 						}
 					}
-					
-					if(content.contains("joined the party!")){
+
+					if (content.contains("joined the party!")) {
 						if (content.startsWith("[")) {
 							content = StringUtils.substringAfter(content, "] ");
 						}
 						content = StringUtils.substringBefore(content, " joined");
-						if(SpecBot.instance.banList.contains(content.toLowerCase())){
+						if (SpecBot.instance.banList.contains(content.toLowerCase())) {
 							if (!parent.getContainer().isFinished()) {
 								parent.getContainer().finish(false);
 							}
 						}
 					}
-					
-					if(content.contains("Party members")){
-						for(String user : SpecBot.instance.banList){
-							if(content.toLowerCase().contains(user)){
+
+					if (content.contains("Party members")) {
+						for (String user : SpecBot.instance.banList) {
+							if (content.toLowerCase().contains(user)) {
 								if (!parent.getContainer().isFinished()) {
 									parent.getContainer().finish(false);
 								}
@@ -90,8 +88,8 @@ public class SpectatorChatBot extends SessionAdapter {
 					}
 
 					if (content.contains("                              Smash Heroes")) {
-						
-						event.getSession().send(new ClientChatPacket("/lobby smash"));
+
+						parent.sendMessage("/lobby smash");
 						parent.getContainer().registerGame(DateTime.now());
 					}
 
@@ -102,19 +100,36 @@ public class SpectatorChatBot extends SessionAdapter {
 							parent.getContainer().finish(false);
 						}
 					}
-					
-					
-					if(content.contains("Friend request from")){ 
-						content = StringUtils.substringAfterLast(StringUtils.substringBeforeLast(content, "[ACCEPT]").trim(), " ").trim();
-						event.getSession().send(new ClientChatPacket(
-								"/f " + content));
+
+					if (content.contains("Friend request from")) {
+						content = StringUtils
+								.substringAfterLast(StringUtils.substringBeforeLast(content, "[ACCEPT]").trim(), " ")
+								.trim();
+						parent.sendMessage("/f " + content);
 					}
 
-				} else if(content.startsWith("From")){
-					event.getSession().send(new ClientChatPacket(
-							"/r " + EmojiMovieCountdown.getCountdown()));
+				} else if (content.startsWith("From")) {
+					parent.sendMessage("/r " + EmojiMovieCountdown.getCountdown());
+				}
+
+			} else if (event.getPacket() instanceof ServerDisplayScoreboardPacket) {
+				String scoreboard = event.<ServerDisplayScoreboardPacket> getPacket().getScoreboardName();
+				if(!(scoreboard.equalsIgnoreCase("supersmash") || scoreboard.equalsIgnoreCase(parent.getName()))){
+					parent.sendMessage("/lobby smash");
+					parent.sendMessage("/pchat The use of SpecBot outside of Smash Heroes is not permitted. Returning to the Smash Heroes lobby...");
+				}
+
+			} else if (event.getPacket() instanceof ServerKeepAlivePacket) {
+				if (!parent.getMessages().isEmpty()) {
+					event.getSession().send(new ClientChatPacket(parent.getMessages().get(0)));
+					parent.getMessages().remove(0);
+				} else {
+					if (parent.isDisconnecting()) {
+						parent.disconnect();
+					}
 				}
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
