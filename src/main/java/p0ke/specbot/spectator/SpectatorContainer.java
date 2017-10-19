@@ -23,9 +23,11 @@ public class SpectatorContainer {
 		owner = o;
 		ownerName = n;
 		spectators = s;
-		SpecBot.instance.usageStats.addContainersRequested(1);
-		SpecBot.instance.usageStats.addSpecsRequested(spectators.size());
-		SpecBot.instance.usageStats.save();
+		if(spectators.size() < 3){
+			SpecBot.instance.usageStats.addContainersRequested(1);
+			SpecBot.instance.usageStats.addSpecsRequested(spectators.size());
+			SpecBot.instance.usageStats.save();
+		}
 		for (Spectator spec : spectators) {
 			spec.assignContainer(this);
 			spec.login();
@@ -66,8 +68,10 @@ public class SpectatorContainer {
 	public void party(String n){
 		if(pLeader.isEmpty()){
 			pLeader = n;
-			SpecBot.instance.usageStats.addPartiesJoined(1);
-			SpecBot.instance.usageStats.save();
+			if(spectators.size() < 3){
+				SpecBot.instance.usageStats.addPartiesJoined(1);
+				SpecBot.instance.usageStats.save();
+			}
 		}
 	}
 	
@@ -75,8 +79,10 @@ public class SpectatorContainer {
 		Duration duration = new Duration(lastGameStart, dt);
 		if(duration.getStandardSeconds() > 12){ //if game is different
 			lastGameStart = dt;
-			SpecBot.instance.usageStats.addGamesJoined(1);
-			SpecBot.instance.usageStats.save();
+			if(spectators.size() < 3){
+				SpecBot.instance.usageStats.addGamesJoined(1);
+				SpecBot.instance.usageStats.save();
+			}
 		}
 		
 	}
@@ -85,7 +91,9 @@ public class SpectatorContainer {
 		finished = true;
 		timer.cancel();
 		for (Spectator spec : spectators) {
-			SpecBot.instance.usageStats.addIngameTime(spec.getIngameTime());
+			if(spectators.size() < 3){
+				SpecBot.instance.usageStats.addIngameTime(spec.getIngameTime());
+			}
 			spec.finish(forced);
 			forced = false;
 		}

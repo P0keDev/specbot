@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class SpectatorManager {
 	
@@ -97,16 +98,26 @@ public class SpectatorManager {
 		for(SpectatorContainer c : containers){
 			if(c.getOwner().equalsIgnoreCase(o)){
 				c.finish(force);
-				containers.remove(c);
 				return "Recalled spectators!";
 			}
 		}
 		return "You have not requested any spectators!";
 	}
 	
-	public void recallAll(){
+	public String recallContainerByName(String n, boolean force){
 		for(SpectatorContainer c : containers){
-			c.finish(true);
+			if(c.getOwnerName().equalsIgnoreCase(n)){
+				c.finish(force);
+				return "Recalled spectators!";
+			}
+		}
+		return "No spectators have been requested by that user!";
+	}
+	
+	public void recallAll(){
+		ListIterator<SpectatorContainer> containerIterator = containers.listIterator();
+		while(containerIterator.hasNext()){
+			containerIterator.next().finish(true);
 		}
 		containers.clear();
 	}

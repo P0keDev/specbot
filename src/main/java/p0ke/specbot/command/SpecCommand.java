@@ -78,7 +78,11 @@ public class SpecCommand extends CommandBase {
 			if(args.get(0).equalsIgnoreCase("forcerecall")){
 				if(event.getMessage().getAuthor().getID().equals("158865537848311809")){
 					if(event.getMessage().getMentions().isEmpty()){
-						SpecBot.instance.specManager.recallAll();
+						if(args.size() > 1){
+							SpecBot.instance.specManager.recallContainerByName(args.get(1), true);
+						} else {
+							SpecBot.instance.specManager.recallAll();
+						}
 					} else {
 						SpecBot.instance.specManager.recallContainer(event.getMessage().getMentions().get(0).getID(), true);
 					}

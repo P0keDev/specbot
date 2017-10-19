@@ -73,6 +73,10 @@ public class Spectator {
 		return disconnecting;
 	}
 	
+	public void setDisconnecting(boolean d){
+		disconnecting = d;
+	}
+	
 	public void sendMessage(String msg){
 		messages.add(msg);
 	}

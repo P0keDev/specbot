@@ -85,8 +85,7 @@ public class SpecBot {
 		}
 		
 		client.changeStatus(Status.game("Smash Heroes"));
-		
-		
+				
 		System.out.println("Ready!");
 		
 	}

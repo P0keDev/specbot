@@ -100,6 +100,11 @@ public class SpectatorChatBot extends SessionAdapter {
 							parent.getContainer().finish(false);
 						}
 					}
+					
+					if(content.toLowerCase().contains(parent.getName().toLowerCase() + "  to party leader!")){
+						parent.sendMessage("/p disband");
+						
+					}
 
 					if (content.contains("Friend request from")) {
 						content = StringUtils
@@ -114,9 +119,10 @@ public class SpectatorChatBot extends SessionAdapter {
 
 			} else if (event.getPacket() instanceof ServerDisplayScoreboardPacket) {
 				String scoreboard = event.<ServerDisplayScoreboardPacket> getPacket().getScoreboardName();
-				if(!(scoreboard.equalsIgnoreCase("supersmash") || scoreboard.equalsIgnoreCase(parent.getName()))){
+				if(!(scoreboard.equalsIgnoreCase("supersmash") || scoreboard.equalsIgnoreCase("health") || scoreboard.equalsIgnoreCase("health_tab") || scoreboard.equalsIgnoreCase(parent.getName()))){
 					parent.sendMessage("/lobby smash");
 					parent.sendMessage("/pchat The use of SpecBot outside of Smash Heroes is not permitted. Returning to the Smash Heroes lobby...");
+					System.out.println("Scoreboard: " + scoreboard);
 				}
 
 			} else if (event.getPacket() instanceof ServerKeepAlivePacket) {
@@ -141,6 +147,7 @@ public class SpectatorChatBot extends SessionAdapter {
 		if (!parent.getContainer().isFinished()) {
 			parent.getContainer().finish(false);
 		}
+		parent.setDisconnecting(false);
 		if (event.getCause() != null) {
 			event.getCause().printStackTrace();
 		}
