@@ -30,6 +30,7 @@ public class SpectatorChatBot extends SessionAdapter {
 			if (event.getPacket() instanceof ServerChatPacket) {
 				Message message = event.<ServerChatPacket> getPacket().getMessage();
 				String content = message.getFullText();
+				System.out.println(content);
 				if (!Pattern.compile(".*\\w:.*").matcher(content).matches()) {
 					if (content.contains("has invited you to join") && content.contains("party")
 							&& !parent.isInParty()) {
@@ -110,7 +111,8 @@ public class SpectatorChatBot extends SessionAdapter {
 						content = StringUtils
 								.substringAfterLast(StringUtils.substringBeforeLast(content, "[ACCEPT]").trim(), " ")
 								.trim();
-						parent.sendMessage("/f " + content);
+						parent.sendMessage("/friend accept " + content);
+						parent.sendMessage("/friend add " + content);
 					}
 
 				} else if (content.startsWith("From")) {
