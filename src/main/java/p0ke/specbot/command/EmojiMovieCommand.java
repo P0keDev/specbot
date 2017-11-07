@@ -4,7 +4,7 @@ import java.util.List;
 
 import p0ke.specbot.util.EmojiMovieCountdown;
 import p0ke.specbot.util.RMessageBuilder;
-import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 
 public class EmojiMovieCommand extends CommandBase {
 

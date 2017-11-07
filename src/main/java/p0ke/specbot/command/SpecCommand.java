@@ -9,7 +9,7 @@ import org.joda.time.Duration;
 import p0ke.specbot.SpecBot;
 import p0ke.specbot.util.RMessageBuilder;
 import p0ke.specbot.util.UsageStats;
-import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.util.EmbedBuilder;
 
@@ -27,7 +27,7 @@ public class SpecCommand extends CommandBase {
 			if(args.get(0).equalsIgnoreCase("stats")){
 				EmbedBuilder eb = new EmbedBuilder();
 				UsageStats stats = SpecBot.instance.usageStats;
-				eb.ignoreNullEmptyFields();
+				eb.setLenient(true);
 				eb.withTitle("SpecBot Usage Stats");
 				eb.withDesc("------------------------");
 				
@@ -58,25 +58,25 @@ public class SpecCommand extends CommandBase {
 						return;
 					}
 					
-					if((n > 2 || n < 1) && !event.getMessage().getAuthor().getID().equals(("158865537848311809"))){
+					if((n > 2 || n < 1) && !event.getMessage().getAuthor().getStringID().equals(("158865537848311809"))){
 						msg.withContent("You can only request 1 or 2 bots!").build();
 						return;
 					}
 				}
 				setTypingStatus(event.getMessage().getChannel(), true);
-				msg.withContent(SpecBot.instance.specManager.requestSpectators(event.getMessage().getAuthor().getID(), event.getMessage().getAuthor().getDisplayName(event.getMessage().getGuild()), n)).build();
+				msg.withContent(SpecBot.instance.specManager.requestSpectators(event.getMessage().getAuthor().getStringID(), event.getMessage().getAuthor().getDisplayName(event.getMessage().getGuild()), n)).build();
 				setTypingStatus(event.getMessage().getChannel(), false);
 				
 			} else
 			
 			
 			if(args.get(0).equalsIgnoreCase("recall")){
-				msg.withContent(SpecBot.instance.specManager.recallContainer(event.getMessage().getAuthor().getID(), false)).build();
+				msg.withContent(SpecBot.instance.specManager.recallContainer(event.getMessage().getAuthor().getStringID(), false)).build();
 			} else
 				
 				
 			if(args.get(0).equalsIgnoreCase("forcerecall")){
-				if(event.getMessage().getAuthor().getID().equals("158865537848311809")){
+				if(event.getMessage().getAuthor().getStringID().equals("158865537848311809")){
 					if(event.getMessage().getMentions().isEmpty()){
 						if(args.size() > 1){
 							SpecBot.instance.specManager.recallContainerByName(args.get(1), true);
@@ -84,7 +84,7 @@ public class SpecCommand extends CommandBase {
 							SpecBot.instance.specManager.recallAll();
 						}
 					} else {
-						SpecBot.instance.specManager.recallContainer(event.getMessage().getMentions().get(0).getID(), true);
+						SpecBot.instance.specManager.recallContainer(event.getMessage().getMentions().get(0).getStringID(), true);
 					}
 				}
 			} else
@@ -107,7 +107,7 @@ public class SpecCommand extends CommandBase {
 			
 			
 			if(args.get(0).equalsIgnoreCase("reload")){
-				if(event.getMessage().getAuthor().getID().equals("158865537848311809")){
+				if(event.getMessage().getAuthor().getStringID().equals("158865537848311809")){
 					SpecBot.instance.specManager.loadSpectators();
 				}
 			} else 

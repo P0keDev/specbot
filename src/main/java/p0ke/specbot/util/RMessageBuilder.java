@@ -75,7 +75,7 @@ public class RMessageBuilder extends MessageBuilder {
 	}
 
 	@Override
-	public RMessageBuilder withChannel(String channelID) {
+	public RMessageBuilder withChannel(long channelID) {
 		super.withChannel(channelID);
 		return this;
 	}

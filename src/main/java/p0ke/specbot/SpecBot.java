@@ -13,9 +13,8 @@ import sx.blah.discord.Discord4J;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
-import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
-import sx.blah.discord.handle.obj.Status;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.util.DiscordException;
 
 public class SpecBot {
@@ -84,7 +83,7 @@ public class SpecBot {
 			System.exit(1);
 		}
 		
-		client.changeStatus(Status.game("Smash Heroes"));
+		client.changePlayingText("Smash Heroes");
 				
 		System.out.println("Ready!");
 		

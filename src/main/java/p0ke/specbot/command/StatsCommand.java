@@ -19,7 +19,7 @@ import net.hypixel.api.request.RequestParam;
 import net.hypixel.api.request.RequestType;
 import p0ke.specbot.SpecBot;
 import p0ke.specbot.util.RMessageBuilder;
-import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 
 public class StatsCommand extends CommandBase {
 	
@@ -28,8 +28,8 @@ public class StatsCommand extends CommandBase {
 	@Override
 	public void run(List<String> args, MessageReceivedEvent event, RMessageBuilder msg) throws Exception {
 		
-		if(cooldown.containsKey(event.getMessage().getAuthor().getID())){
-			if(cooldown.get(event.getMessage().getAuthor().getID()).plusHours(24).isAfter(event.getMessage().getCreationDate())){
+		if(cooldown.containsKey(event.getMessage().getAuthor().getStringID())){
+			if(cooldown.get(event.getMessage().getAuthor().getStringID()).plusHours(24).isAfter(event.getMessage().getCreationDate())){
 				msg.withContent("You may only request a player's stats once every 24 hours!").build();
 				return;
 			}
@@ -63,7 +63,7 @@ public class StatsCommand extends CommandBase {
 				
 				msg.withContent(paste.paste().getLink().toString()).build();
 				
-				cooldown.put(event.getMessage().getAuthor().getID(), event.getMessage().getCreationDate());
+				cooldown.put(event.getMessage().getAuthor().getStringID(), event.getMessage().getCreationDate());
 			
 			} catch (Exception e){
 				msg.withContent("Error creating pastebin link").build();

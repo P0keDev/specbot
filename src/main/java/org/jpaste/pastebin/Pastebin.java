@@ -212,7 +212,8 @@ public class Pastebin {
      *            the <code>Post</code> with the options
      * @return the pastes.
      */
-    public static PastebinLink[] getMostRecent(Post post) throws ParseException {
+    @SuppressWarnings("unchecked")
+	public static PastebinLink[] getMostRecent(Post post) throws ParseException {
         String url = API_SCRAPING_LINK;
         if (post != null && !post.getPost().isEmpty()) {
             url += "?" + post.getPost();
@@ -257,7 +258,8 @@ public class Pastebin {
         return listPastebinLink.toArray(new PastebinLink[listPastebinLink.size()]);
     }
 
-    private static ArrayList<Object> getJSonData(String response) {
+    @SuppressWarnings("unchecked")
+	private static ArrayList<Object> getJSonData(String response) {
         ObjectMapper mapper = new ObjectMapper();
         try {
             ArrayList<Object> data = mapper.readValue(response, ArrayList.class);
