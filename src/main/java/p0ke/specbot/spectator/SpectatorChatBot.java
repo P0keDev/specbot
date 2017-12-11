@@ -93,7 +93,7 @@ public class SpectatorChatBot extends SessionAdapter {
 						
 						if(content.contains("has joined (2/2)")){
 							is1v1 = true;
-							parent.sendMessage("1v1 mode detected! Engaging training dummy mode.");
+							parent.sendMessage("/pchat 1v1 mode detected! Engaging training dummy mode.");
 						}
 						
 	
