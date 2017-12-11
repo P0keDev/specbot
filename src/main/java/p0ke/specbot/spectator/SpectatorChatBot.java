@@ -20,6 +20,8 @@ import p0ke.specbot.util.EmojiMovieCountdown;
 public class SpectatorChatBot extends SessionAdapter {
 
 	private Spectator parent;
+	
+	private boolean is1v1 = false;
 
 	public SpectatorChatBot(Spectator s) {
 		parent = s;
@@ -88,10 +90,18 @@ public class SpectatorChatBot extends SessionAdapter {
 								}
 							}
 						}
+						
+						if(content.contains("has joined (2/2)")){
+							is1v1 = true;
+							parent.sendMessage("1v1 mode detected! Engaging training dummy mode.");
+						}
+						
 	
 						if (content.contains("                              Smash Heroes")) {
-	
-							parent.sendMessage("/lobby smash");
+							if(!is1v1){
+								parent.sendMessage("/lobby smash");
+							}
+							is1v1 = false;
 							parent.getContainer().registerGame(DateTime.now());
 						}
 	
@@ -126,6 +136,7 @@ public class SpectatorChatBot extends SessionAdapter {
 					parent.sendMessage("/lobby smash");
 					parent.sendMessage("/pchat The use of SpecBot outside of Smash Heroes is not permitted. Returning to the Smash Heroes lobby...");
 					System.out.println("Scoreboard: " + scoreboard);
+					is1v1 = false;
 				}
 
 			} else if (event.getPacket() instanceof ServerKeepAlivePacket) {
